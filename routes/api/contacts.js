@@ -9,7 +9,7 @@ const {
   deleteContact,
   editContact,
   updateStatusContact,
-} = require("../../controllers/controllers");
+} = require("../../controllers/Contacts/index");
 
 router.get("/", getContacts);
 router.get("/:contactId", getContactByID);
