@@ -1,8 +1,5 @@
 const express = require("express");
-
-// const {validateBody} = require('middlewares')??????
-const { schemaValidationUser } = require("../../schemas/index");
-const { authenticate } = require("../../middlewares/index");
+const { authenticate, upload } = require("../../middlewares/index");
 const router = express.Router();
 
 const {
@@ -10,11 +7,13 @@ const {
   loginUser,
   getCurrentUser,
   logoutUser,
+  updateAvatar,
 } = require("../../controllers/Auth/index");
 
 router.post("/register", registerUser);
 router.post("/login", loginUser);
 router.get("/current", authenticate, getCurrentUser);
 router.post("/logout", authenticate, logoutUser);
+router.patch("/avatars", authenticate, upload.single("avatar"), updateAvatar);
 
 module.exports = router;

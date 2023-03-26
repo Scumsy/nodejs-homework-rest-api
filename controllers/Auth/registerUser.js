@@ -1,6 +1,6 @@
 const { User } = require("../../models/user");
 const bcrypt = require("bcrypt");
-
+const gravatar = require("gravatar");
 const { HttpError } = require("../../helpers/HttpError");
 const { schemaValidationUser } = require("../../schemas/index");
 
@@ -18,21 +18,17 @@ async function registerUser(req, res) {
     }
 
     const hashPassword = await bcrypt.hash(password, 10);
+    const avatarURL = gravatar.url(email);
 
-    const { error, value } = schemaValidationUser.validate(req.body);
-    if (!error && value) {
-      const newUser = await User.create({
-        ...req.body,
-        password: hashPassword,
-      });
-      res.status(201).json({
-        email: newUser.email,
-      });
-    } else {
-      res.status(400).json({
-        message: error.message,
-      });
-    }
+    const newUser = await User.create({
+      email,
+      password: hashPassword,
+      avatarURL,
+    });
+    res.status(201).json({
+      email: newUser.email,
+      avatarURL,
+    });
   } catch (error) {
     console.log(error);
     res.status(error.status).json(error.message);
