@@ -1,12 +1,10 @@
 const Contact = require("../../models/contact");
 
-const {
-  schemaValidationEditContact,
-} = require("../../schemas/schemaValidation");
+const { schemaValidationEditContact } = require("../../schemas/index");
 
 async function editContact(req, res) {
   const id = req.params.contactId;
-  const { name, email, phone, favorite } = req.body;
+
   if (!req.body) {
     res.status(400).json({
       message: "missing fields",
@@ -15,10 +13,7 @@ async function editContact(req, res) {
     const { error, value } = schemaValidationEditContact.validate(req.body);
 
     if (!error && value) {
-      await Contact.findOneAndUpdate(
-        { _id: id },
-        { name, email, phone, favorite }
-      );
+      await Contact.findOneAndUpdate({ _id: id }, value);
       res.status(200).json(value);
     } else {
       res.status(400).json({
