@@ -1,7 +1,7 @@
 const { User } = require("../../models/user");
 const { sendEmail, HttpError } = require("../../helpers/index");
 const { BASE_URL } = process.env;
-const { v4: uuidv4 } = require("uuid");
+
 const Joi = require("joi");
 
 const resendVerifyEmail = async (req, res) => {
@@ -26,7 +26,7 @@ const resendVerifyEmail = async (req, res) => {
       res.status(404).json({ message: "There is no such user in the system" });
     }
     if (user.verified) {
-      res.status(404).json({ message: "Verification has already been passed" });
+      res.status(400).json({ message: "Verification has already been passed" });
     }
 
     const verifyEmail = {
@@ -42,7 +42,6 @@ const resendVerifyEmail = async (req, res) => {
     });
   } catch (error) {
     throw HttpError(error);
-    // console.log(error);
   }
 };
 
