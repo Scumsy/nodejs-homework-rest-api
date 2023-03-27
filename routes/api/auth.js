@@ -8,9 +8,13 @@ const {
   getCurrentUser,
   logoutUser,
   updateAvatar,
+  verifyEmail,
+  resendVerifyEmail,
 } = require("../../controllers/Auth/index");
 
 router.post("/register", registerUser);
+router.get("/verify/:verificationCode", verifyEmail);
+router.post("/verify", resendVerifyEmail);
 router.post("/login", loginUser);
 router.get("/current", authenticate, getCurrentUser);
 router.post("/logout", authenticate, logoutUser);

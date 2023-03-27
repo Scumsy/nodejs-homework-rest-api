@@ -1,6 +1,6 @@
 const { User } = require("../../models/user");
 const bcrypt = require("bcrypt");
-const { HttpError } = require("../../helpers/HttpError");
+const { HttpError } = require("../../helpers/index");
 const jwt = require("jsonwebtoken");
 const { schemaValidationUser } = require("../../schemas");
 const { SECRET_KEY } = process.env;
@@ -14,6 +14,10 @@ const loginUser = async (req, res) => {
       throw HttpError(404, "missing or incorrect required field");
     }
     const user = await User.findOne({ email });
+    if (!user.verified) {
+      throw HttpError(401, "Email not verified");
+    }
+
     if (!user) {
       throw HttpError(401, "Email or password invalid");
     }
